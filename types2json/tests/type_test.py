@@ -7,6 +7,10 @@ from typing import (
 
 from types2json.main import AttributeMeta, AttributeType, get_class_init_params
 
+"""
+A dummy test object
+"""
+
 
 class TestObject(object):
     def __eq__(self, other):
@@ -16,6 +20,12 @@ class TestObject(object):
 
     def __hash__(self):
         return 42
+
+
+"""
+A dummy test class for all currently supported types
+both with/without default values
+"""
 
 
 class TestClassAll:
@@ -47,6 +57,11 @@ class TestClassAll:
         self.str = str
 
 
+"""
+A dummy test class for string parameters
+"""
+
+
 class TestClassStr:
     def __init__(
         self,
@@ -55,6 +70,12 @@ class TestClassStr:
     ) -> None:
         self.name = name
         self.text = text
+
+
+"""
+Simple test with dummy test classes
+Hardcoded the expected result
+"""
 
 
 def test_all_cls():
