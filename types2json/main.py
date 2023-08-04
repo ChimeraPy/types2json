@@ -6,6 +6,7 @@ from typing import (
     ClassVar,
     Dict,
     List,
+    Literal,
     Type,
     Union,
     get_args,
@@ -27,6 +28,7 @@ class AttributeType(str, Enum):
     TUPLE = "TUPLE"
     OBJECT = "OBJECT"
     ENUM = "ENUM"
+    LITERAL = "LITERAL"
     UNKNOWN = "UNKNOWN"
 
 
@@ -96,13 +98,13 @@ def _is_a_type(annotation: Any, type_) -> bool:
     if get_origin(annotation) is Union:
         return any(_is_a_type(arg, type_) for arg in get_args(annotation))
 
-    if type_ is Enum:
+    if type_ is Enum and isinstance(annotation, type):
         return issubclass(annotation, Enum)
 
     return False
 
 
-def _parse_param_type(annotation: Any) -> AttributeType:
+def _parse_param_type(annotation: Any) -> AttributeType:  # noqa
     """Parse the type of a parameter."""
     if annotation is inspect.Parameter.empty:
         return AttributeType.UNKNOWN
@@ -122,6 +124,8 @@ def _parse_param_type(annotation: Any) -> AttributeType:
         return AttributeType.OBJECT
     if _is_a_type(annotation, Enum):
         return AttributeType.ENUM
+    if _is_a_type(annotation, Literal):
+        return AttributeType.LITERAL
 
     return AttributeType.UNKNOWN
 
@@ -134,6 +138,9 @@ def _get_choices(annotation: Any) -> List[Any]:
 
     if _is_a_type(annotation, bool):
         return [True, False]
+
+    if _is_a_type(annotation, Literal):
+        return annotation.__args__
 
     return []
 
