@@ -46,10 +46,10 @@ class TestClassAll:
         int_val: int = 0,
         flt_val: float = 0.0,
         bool_val: bool = True,
-        obj_val: Dict = None,
+        obj_val: Dict = {"dict": "val"},  # noqa: B006
         unknown_val: TestObject = None,
         tup_val: tuple = (1, "hello"),
-        lst_val: List[int] = None,
+        lst_val: List[int] = [1, 2, 3],  # noqa: B006
         union_val: Union[str, int] = "string",
         enum_val: AttributeType = AttributeType.ENUM,
         literal_val: Literal["a", "b"] = "a",
@@ -226,7 +226,7 @@ def test_all_cls():
         ),
         "unknown_val": AttributeMeta(
             name="unknown_val",
-            value=TestObject(),
+            value=None,
             type=AttributeType.UNKNOWN,
             choices=[],
             required=False,
@@ -285,19 +285,3 @@ def test_all_cls():
     assert (
         all_param == all_param_asr
     ), f"Expected {all_param_asr},\n but got {all_param}"
-
-
-#  ---- testing mmlapipe nodes ----
-# from chimerapy.pipelines.yolov8.multi_vid_pose import YoloV8Node
-# from chimerapy.pipelines.yolov8.multi_save import MultiSaveNode
-
-# def test_nodes():
-#     # yolo node
-#     yolo_param = get_class_init_params(YoloV8Node)
-#     yolo_param_asr = {}
-#     print("\n".join(str(param.model_dump()) for _, param in yolo_param.items()))
-
-#     # save node
-#     save_param = get_class_init_params(MultiSaveNode)
-#     save_param_asr = {}
-#     print("\n".join(str(param.model_dump()) for _, param in save_param.items()))
