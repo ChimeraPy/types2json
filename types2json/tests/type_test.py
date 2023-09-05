@@ -72,12 +72,35 @@ class TestClassStr:
 
 
 """
+A dummy class that inherits from another class
+"""
+
+
+class TestSubClass(TestClassStr):
+    def __init__(
+        self,
+        subname: str,
+        subtext: str = "subtext",
+    ) -> None:
+        pass
+
+
+class TestSubSubClass(TestSubClass):
+    def __init__(
+        self,
+        subsubname: str,
+        subsubtext: str = "subsubtext",
+    ) -> None:
+        pass
+
+
+"""
 A dummy test class for nested types
 with/without default values
 """
 
 
-class TestNested:
+class TestClassNested:
     def __init__(
         self,
         tuple: tuple[tuple[int, str], tuple[float, bool]],
@@ -317,7 +340,7 @@ Testing embedded items
 
 def test_nested():
     # nested types with & wihtout value
-    nested_param = get_class_init_params(TestNested)
+    nested_param = get_class_init_params(TestClassNested)
     nested_param_asr = {
         "tuple": AttributeMeta(
             name="tuple",
@@ -380,3 +403,61 @@ def test_nested():
     assert (
         nested_param == nested_param_asr
     ), f"Expected {nested_param_asr},\n but got {nested_param}"
+
+
+"""
+Testing subclass
+"""
+
+
+def test_subclass():
+    # getting params from subclass
+    sub_param = get_class_init_params(TestSubSubClass)
+    sub_param_asr = {
+        "name": AttributeMeta(
+            name="name",
+            value=None,
+            type=AttributeType.STRING,
+            choices=[],
+            required=True,
+        ),
+        "text": AttributeMeta(
+            name="text",
+            value="text",
+            type=AttributeType.STRING,
+            choices=[],
+            required=False,
+        ),
+        "subname": AttributeMeta(
+            name="subname",
+            value=None,
+            type=AttributeType.STRING,
+            choices=[],
+            required=True,
+        ),
+        "subtext": AttributeMeta(
+            name="subtext",
+            value="subtext",
+            type=AttributeType.STRING,
+            choices=[],
+            required=False,
+        ),
+        "subsubname": AttributeMeta(
+            name="subsubname",
+            value=None,
+            type=AttributeType.STRING,
+            choices=[],
+            required=True,
+        ),
+        "subsubtext": AttributeMeta(
+            name="subsubtext",
+            value="subsubtext",
+            type=AttributeType.STRING,
+            choices=[],
+            required=False,
+        ),
+    }
+
+    assert (
+        sub_param == sub_param_asr
+    ), f"Expected {sub_param_asr},\n but got {sub_param}"
