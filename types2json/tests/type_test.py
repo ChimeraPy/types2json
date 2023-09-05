@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import (
     Dict,
     List,
@@ -20,6 +21,16 @@ class TestObject(object):
 
     def __hash__(self):
         return 42
+
+
+"""
+A nested Enum Class
+"""
+
+
+class NestedEnum(Enum):
+    NESTED = "NESTED"
+    TYPE = AttributeType
 
 
 """
@@ -107,6 +118,7 @@ class TestClassNested:
         lst: List[List[int]],
         union: Union[int, Union[str, float]],
         dict: Dict[str, Dict[int, float]],
+        enum: NestedEnum,
         tuple_val: tuple[tuple[int, str], tuple[float, bool]] = (
             (0, "string"),
             (0.0, False),
@@ -114,6 +126,7 @@ class TestClassNested:
         lst_val: List[List[int]] = [[1, 2, 3], [4, 5, 6]],  # noqa: B006
         union_val: Union[int, Union[str, float]] = "string",
         dict_val: Dict[str, Dict[int, float]] = {"key": {0: 0.0}},  # noqa: B006
+        enum_val: NestedEnum = NestedEnum.TYPE.value.STRING,
     ) -> None:
         pass
 
@@ -370,6 +383,13 @@ def test_nested():
             choices=[],
             required=True,
         ),
+        "enum": AttributeMeta(
+            name="enum",
+            value=None,
+            type=AttributeType.ENUM,
+            choices=["NESTED", AttributeType],
+            required=True,
+        ),
         "tuple_val": AttributeMeta(
             name="tuple_val",
             value=((0, "string"), (0.0, False)),
@@ -396,6 +416,13 @@ def test_nested():
             value={"key": {0: 0.0}},
             type=AttributeType.OBJECT,
             choices=[],
+            required=False,
+        ),
+        "enum_val": AttributeMeta(
+            name="enum_val",
+            value=AttributeType.STRING,
+            type=AttributeType.ENUM,
+            choices=["NESTED", AttributeType],
             required=False,
         ),
     }
