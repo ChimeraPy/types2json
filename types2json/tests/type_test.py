@@ -1,10 +1,5 @@
 from enum import Enum
-from typing import (
-    Dict,
-    List,
-    Literal,
-    Union,
-)
+from typing import Dict, List, Literal, Optional, Union
 
 from types2json.main import AttributeMeta, AttributeType, get_class_init_params
 
@@ -119,6 +114,7 @@ class TestClassNested:
         union: Union[int, Union[str, float]],
         dict: Dict[str, Dict[int, float]],
         enum: NestedEnum,
+        option: Optional[Optional[int]],
         tuple_val: tuple[tuple[int, str], tuple[float, bool]] = (
             (0, "string"),
             (0.0, False),
@@ -127,6 +123,7 @@ class TestClassNested:
         union_val: Union[int, Union[str, float]] = "string",
         dict_val: Dict[str, Dict[int, float]] = {"key": {0: 0.0}},  # noqa: B006
         enum_val: NestedEnum = NestedEnum.TYPE.value.STRING,
+        option_val: Optional[Optional[int]] = 0,
     ) -> None:
         pass
 
@@ -390,6 +387,13 @@ def test_nested():
             choices=["NESTED", AttributeType],
             required=True,
         ),
+        "option": AttributeMeta(
+            name="option",
+            value=None,
+            type=AttributeType.INTEGER,
+            choices=[],
+            required=True,
+        ),
         "tuple_val": AttributeMeta(
             name="tuple_val",
             value=((0, "string"), (0.0, False)),
@@ -423,6 +427,13 @@ def test_nested():
             value=AttributeType.STRING,
             type=AttributeType.ENUM,
             choices=["NESTED", AttributeType],
+            required=False,
+        ),
+        "option_val": AttributeMeta(
+            name="option_val",
+            value=0,
+            type=AttributeType.INTEGER,
+            choices=[],
             required=False,
         ),
     }
