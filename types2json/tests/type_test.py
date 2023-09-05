@@ -54,7 +54,7 @@ class TestClassAll:
         enum_val: AttributeType = AttributeType.ENUM,
         literal_val: Literal["a", "b"] = "a",
     ) -> None:
-        self.str = str
+        pass
 
 
 """
@@ -68,8 +68,31 @@ class TestClassStr:
         name: str,
         text: str = "text",
     ) -> None:
-        self.name = name
-        self.text = text
+        pass
+
+
+"""
+A dummy test class for nested types
+with/without default values
+"""
+
+
+class TestNested:
+    def __init__(
+        self,
+        tuple: tuple[tuple[int, str], tuple[float, bool]],
+        lst: List[List[int]],
+        union: Union[int, Union[str, float]],
+        dict: Dict[str, Dict[int, float]],
+        tuple_val: tuple[tuple[int, str], tuple[float, bool]] = (
+            (0, "string"),
+            (0.0, False),
+        ),
+        lst_val: List[List[int]] = [[1, 2, 3], [4, 5, 6]],  # noqa: B006
+        union_val: Union[int, Union[str, float]] = "string",
+        dict_val: Dict[str, Dict[int, float]] = {"key": {0: 0.0}},  # noqa: B006
+    ) -> None:
+        pass
 
 
 """
@@ -285,3 +308,75 @@ def test_all_cls():
     assert (
         all_param == all_param_asr
     ), f"Expected {all_param_asr},\n but got {all_param}"
+
+
+"""
+Testing embedded items
+"""
+
+
+def test_nested():
+    # nested types with & wihtout value
+    nested_param = get_class_init_params(TestNested)
+    nested_param_asr = {
+        "tuple": AttributeMeta(
+            name="tuple",
+            value=None,
+            type=AttributeType.TUPLE,
+            choices=[],
+            required=True,
+        ),
+        "lst": AttributeMeta(
+            name="lst",
+            value=None,
+            type=AttributeType.ARRAY,
+            choices=[],
+            required=True,
+        ),
+        "union": AttributeMeta(
+            name="union",
+            value=None,
+            type=AttributeType.STRING,
+            choices=[],
+            required=True,
+        ),
+        "dict": AttributeMeta(
+            name="dict",
+            value=None,
+            type=AttributeType.OBJECT,
+            choices=[],
+            required=True,
+        ),
+        "tuple_val": AttributeMeta(
+            name="tuple_val",
+            value=((0, "string"), (0.0, False)),
+            type=AttributeType.TUPLE,
+            choices=[],
+            required=False,
+        ),
+        "lst_val": AttributeMeta(
+            name="lst_val",
+            value=[[1, 2, 3], [4, 5, 6]],
+            type=AttributeType.ARRAY,
+            choices=[],
+            required=False,
+        ),
+        "union_val": AttributeMeta(
+            name="union_val",
+            value="string",
+            type=AttributeType.STRING,
+            choices=[],
+            required=False,
+        ),
+        "dict_val": AttributeMeta(
+            name="dict_val",
+            value={"key": {0: 0.0}},
+            type=AttributeType.OBJECT,
+            choices=[],
+            required=False,
+        ),
+    }
+
+    assert (
+        nested_param == nested_param_asr
+    ), f"Expected {nested_param_asr},\n but got {nested_param}"
