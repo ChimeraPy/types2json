@@ -35,4 +35,4 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pytest -v --color yes
+          python -m pytest -v --color yes types2json
